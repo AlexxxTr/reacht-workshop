@@ -1,17 +1,24 @@
-import type { ChangeEvent, FormEvent,HTMLProps } from 'react';
+import type { ChangeEvent, FormEvent, HTMLProps } from 'react';
 import { useState } from 'react';
 
-type Props = HTMLProps<HTMLFormElement>;
+import useConvertKitSubmission from '../hooks/useConvertKitSubmission';
 
-const SignUp = ({ ...formProps }: Props) => {
-  const [email, setEmail] = useState<string>();
+type Props = HTMLProps<HTMLFormElement> & {
+  onSubscription: () => void;
+};
+
+const SignUp = ({onSubscription, ...formProps }: Props) => {
+  const { errorMessage, subscribeToConvertKit } = useConvertKitSubmission();
+  const [email, setEmail] = useState<string>('');
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    await subscribeToConvertKit({ email, onSubscription });
   };
   return (
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     <form method="post" onSubmit={handleSubmit} {...formProps}>
       <h2>Subscribe!</h2>
       <p>Don't miss any of the action!</p>
@@ -28,7 +35,7 @@ const SignUp = ({ ...formProps }: Props) => {
         <button type="submit">Subscribe</button>
       </fieldset>
 
-      <p id="error-message" />
+      {errorMessage && <p id="error-message">{errorMessage}</p>}
     </form>
   );
 };
