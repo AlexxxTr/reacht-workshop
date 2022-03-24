@@ -1,0 +1,56 @@
+{
+  "name": "react-workshop",
+  "private": true,
+  "description": "",
+  "license": "",
+  "sideEffects": false,
+  "scripts": {
+    "build": "remix build",
+    "dev": "remix build && run-p dev:*",
+    "dev:node": "cross-env NODE_ENV=development nodemon -r dotenv/config ./build/index.js --watch ./build/index.js",
+    "dev:remix": "remix watch",
+    "dev:css": "postcss styles --base styles --dir app/styles -w",
+    "lint": "eslint 'app/**/*.{js,jsx,ts,tsx}' --fix",
+    "stylelint": "stylelint 'styles/**/*.{css,scss,sass}' --fix",
+    "postinstall": "remix setup node",
+    "prettier": "prettier 'app/**/*' --write",
+    "start": "cross-env NODE_ENV=production node ./build/index.js"
+  },
+  "dependencies": {
+    "@remix-run/express": "^1.3.2",
+    "@remix-run/react": "^1.3.2",
+    "compression": "^1.7.4",
+    "cross-env": "^7.0.3",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "remix": "^1.3.2"
+  },
+  "devDependencies": {
+    "@inthepocket/eslint-config-web": "^1.2.5",
+    "@remix-run/dev": "^1.3.2",
+    "@remix-run/eslint-config": "^1.3.2",
+    "@types/react": "^17.0.24",
+    "@types/react-dom": "^17.0.9",
+    "autoprefixer": "^10.4.4",
+    "eslint": "^8.11.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "nock": "^13.2.4",
+    "nodemon": "^2.0.15",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.12",
+    "postcss-cli": "^9.1.0",
+    "prettier": "^2.6.0",
+    "stylelint": "^14.6.0",
+    "stylelint-config-css-modules": "^4.1.0",
+    "stylelint-config-idiomatic-order": "^8.1.0",
+    "stylelint-config-prettier": "^9.0.3",
+    "stylelint-config-standard": "^25.0.0",
+    "typescript": "^4.5.5"
+  },
+  "engines": {
+    "node": ">=14"
+  }
+}
