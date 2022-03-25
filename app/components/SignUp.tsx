@@ -1,15 +1,18 @@
-import type { ChangeEvent, FormEvent, HTMLProps } from 'react';
-import { useState } from 'react';
+import type { ChangeEvent, Dispatch, FormEvent, HTMLProps, SetStateAction } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import useConvertKitSubmission from '../hooks/useConvertKitSubmission';
 
 type Props = HTMLProps<HTMLFormElement> & {
   onSubscription: () => void;
+  setIsStartingOver: Dispatch<SetStateAction<boolean>>;
+  isStartingOver: boolean;
 };
 
-const SignUp = ({onSubscription, ...formProps }: Props) => {
+const SignUp = ({ isStartingOver, setIsStartingOver, onSubscription, ...formProps }: Props) => {
   const { errorMessage, subscribeToConvertKit } = useConvertKitSubmission();
   const [email, setEmail] = useState<string>('');
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
 
@@ -17,6 +20,14 @@ const SignUp = ({onSubscription, ...formProps }: Props) => {
     e.preventDefault();
     await subscribeToConvertKit({ email, onSubscription });
   };
+
+  useEffect(() => {
+    if (isStartingOver) {
+      inputRef.current?.focus();
+      setIsStartingOver(false);
+    }
+  }, [isStartingOver, setIsStartingOver]);
+
   return (
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     <form method="post" onSubmit={handleSubmit} {...formProps}>
@@ -26,6 +37,7 @@ const SignUp = ({onSubscription, ...formProps }: Props) => {
         <input
           aria-label="Email address"
           aria-describedby="error-message"
+          ref={inputRef}
           type="email"
           name="email"
           value={email}
